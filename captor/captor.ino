@@ -25,6 +25,7 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
   torsion = getTorsion(CAPTOR);
+  Serial.println(torsion);
   reactTorsion(LED, torsion);
   delay(100);
 }
