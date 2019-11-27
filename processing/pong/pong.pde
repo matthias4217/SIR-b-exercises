@@ -30,7 +30,7 @@ void collisionPaddleBall() {
   if (ballPosX + CIRCLE_RADIUS > paddlePosX &&ballPosX - CIRCLE_RADIUS < paddlePosX + PADDLE_WIDTH) {
     if (ballPosY + CIRCLE_RADIUS > paddlePosY) {
       ballSpdY = -ballSpdY;
-      reloadMessage();
+      thread("reloadMessage");
     }
   }
 }
