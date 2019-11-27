@@ -40,6 +40,7 @@ void reloadMessage()
   
   //GetRequest get = new GetRequest("http://quotes.rest/quote/random");//qod");
   GetRequest get = new GetRequest("http://evilinsult.com/generate_insult.php?lang=en&type=json"); // get random insult
+  //GetRequest get = new GetRequest("http://insult.mattbas.org/api/insult");
   get.send();
   println(get.getContent());
   JSONObject quoteJSON = parseJSONObject(get.getContent());
