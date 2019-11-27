@@ -2,6 +2,9 @@ String sentence = "bip boup";
 
 int bits_rythm = 1000;
 
+// if signal > 90 : laser is off (else on)
+int threshold = 90;
+
 // analog pin connected to the diode
 int receiverPin = 3;
 
@@ -51,7 +54,11 @@ char decodeLetter(int i)
 
 void decodeMessage(boolean beats[], int size)
 {
+  int payload[] = {0, 0, 0, 0, 0};
+  int payloadPointer = 0;
+  char letter = ' ';
   int upCount = 0;
+  bool messageSending = false;
   for (int i=0;i<size;i++)
   {
     if (beats[i])
@@ -64,10 +71,28 @@ void decodeMessage(boolean beats[], int size)
       upCount = 0;
       Serial.print("0");
     }
+
+    if (messageSending)
+    {
+      payload[payloadPointer] = beats[i];
+      if (payloadPointer == 4)
+      {
+        Serial.print(".");
+        // compute letter index
+        int letterCode = payload[0] * 16 + payload[1] * 8 + payload[2] * 4 + payload[3] * 2 + payload[4] * 1;
+        letter = decodeLetter(letterCode);
+        Serial.println(letter);
+        payloadPointer = 0;
+      }
+      else {
+        payloadPointer++;
+      }
+    }
     
     if (upCount == 5)
     {
       upCount++;
+      messageSending = !messageSending;
       Serial.println("FLAG");
     }
   }
@@ -87,4 +112,6 @@ void setup() {
 
 void loop() {
   //sendMessage(sentence);
+  int readValue = analogRead(receiverPin);
+  delay(bits_rythm);
 }
